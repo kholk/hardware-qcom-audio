@@ -134,6 +134,7 @@ typedef struct acdb_audio_cal_cfg {
     uint32_t             sampling_rate;
     uint32_t             cal_type;
     uint32_t             module_id;
+// TODO: TRINKET here as well?
 #ifdef PLATFORM_SM8150
     uint16_t             instance_id;
     uint16_t             reserved;
@@ -156,7 +157,7 @@ struct platform_data {
     bool speaker_lr_swap;
 
     void *acdb_handle;
-#if defined (PLATFORM_MSM8994) || (PLATFORM_MSM8996) || (PLATFORM_MSM8998) || (PLATFORM_SDM845) || (PLATFORM_SDM710) || (PLATFORM_SM8150)
+#if defined (PLATFORM_MSM8994) || (PLATFORM_MSM8996) || (PLATFORM_MSM8998) || (PLATFORM_SDM845) || (PLATFORM_SDM710) || (PLATFORM_SM8150) || (PLATFORM_TRINKET)
     acdb_init_v2_cvd_t acdb_init;
 #elif defined (PLATFORM_MSM8084)
     acdb_init_v2_t acdb_init;
@@ -894,7 +895,7 @@ static const char *get_operator_specific_device_mixer_path(snd_device_t snd_devi
 
 inline bool platform_supports_app_type_cfg()
 {
-#if defined (PLATFORM_MSM8998) || (PLATFORM_SDM845) || (PLATFORM_SDM710) || (PLATFORM_SM8150)
+#if defined (PLATFORM_MSM8998) || (PLATFORM_SDM845) || (PLATFORM_SDM710) || (PLATFORM_SM8150) || (PLATFORM_TRINKET)
     return true;
 #else
     return false;
@@ -964,6 +965,7 @@ static int parse_audiocal_cfg(struct str_parms *parms, acdb_audio_cal_cfg_t *cal
         cal->param_id = (uint32_t)strtoul(value, NULL, 0);
         ret = ret | 0x100;
     }
+// TODO: TRINKET here as well?
 #ifdef PLATFORM_SM8150
     err = str_parms_get_str(parms, "cal_instanceid", value, sizeof(value));
     if (err >= 0) {
@@ -1528,7 +1530,7 @@ static int platform_acdb_init(void *platform)
         return 0;
     }
 
-#if defined (PLATFORM_MSM8994) || (PLATFORM_MSM8996) || (PLATFORM_MSM8998) || (PLATFORM_SDM845) || (PLATFORM_SDM710) || (PLATFORM_SM8150)
+#if defined (PLATFORM_MSM8994) || (PLATFORM_MSM8996) || (PLATFORM_MSM8998) || (PLATFORM_SDM845) || (PLATFORM_SDM710) || (PLATFORM_SM8150) || (PLATFORM_TRINKET)
     char *cvd_version = calloc(1, MAX_CVD_VERSION_STRING_SIZE);
     if (!cvd_version)
         ALOGE("failed to allocate cvd_version");
@@ -1900,7 +1902,7 @@ void *platform_init(struct audio_device *adev)
         configure_flicker_sensor_input(adev->mixer);
 #endif
 
-#if defined (PLATFORM_MSM8994) || (PLATFORM_MSM8996) || (PLATFORM_MSM8998) || (PLATFORM_SDM845) || (PLATFORM_SDM710) || (PLATFORM_SM8150)
+#if defined (PLATFORM_MSM8994) || (PLATFORM_MSM8996) || (PLATFORM_MSM8998) || (PLATFORM_SDM845) || (PLATFORM_SDM710) || (PLATFORM_SM8150) || (PLATFORM_TRINKET)
         acdb_init_v2_cvd_t acdb_init_local;
         acdb_init_local = (acdb_init_v2_cvd_t)dlsym(my_data->acdb_handle,
                                               "acdb_loader_init_v2");
